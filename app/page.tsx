@@ -1,14 +1,24 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Header } from "@/components/layout/header";
 import { MenuCard } from "@/components/custom/MenuCard";
 import { Label } from "@/components/ui/label";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { BookOpen, Info, Users } from "lucide-react";
 
 export default function Page() {
     const router = useRouter();
+    const [showFeatureDialog, setShowFeatureDialog] = useState(false);
 
     useEffect(() => {
         // Check if user is already authenticated
@@ -45,17 +55,40 @@ export default function Page() {
                         title="User Manual"
                         description="Panduan Penggunaan Sistem & Alur Kerja"
                         icon={<BookOpen className="h-24 w-24" />}
-                        href="/auth"
+                        href="#"
+                        onClick={() => setShowFeatureDialog(true)}
                     />
                     <MenuCard
                         title="Tentang SPARTA"
                         description="Informasi Versi & Pengembang Aplikasi"
                         icon={<Info className="h-24 w-24" />}
-                        href="/auth"
+                        href="#"
+                        onClick={() => setShowFeatureDialog(true)}
                     />
                     {/* Add more MenuCard components as needed */}
                 </div>
             </div>
+
+            {/* Feature Not Available Dialog */}
+            <AlertDialog
+                open={showFeatureDialog}
+                onOpenChange={setShowFeatureDialog}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            Fitur Belum Tersedia
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Fitur ini masih dalam pengembangan dan belum
+                            tersedia. Silakan coba lagi nanti.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogAction>OK</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </>
     );
 }

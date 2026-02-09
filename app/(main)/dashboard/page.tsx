@@ -46,35 +46,35 @@ const allMenuItems: MenuItem[] = [
         title: "Penawaran Final Kontraktor",
         description: "Buat penawaran final",
         icon: <FileText className="h-10 w-10" />,
-        href: "/rab",
+        href: "/dashboard/rab",
     },
     {
         id: "menu-materai",
         title: "Dokumen Final RAB Termaterai",
         description: "Buat dan lihat RAB Final Termaterai",
         icon: <Stamp className="h-10 w-10" />,
-        href: "/materai",
+        href: "/dashboard/materai",
     },
     {
         id: "menu-spk",
         title: "Surat Perintah Kerja",
         description: "Form surat perintah kerja untuk kontraktor",
         icon: <FileCheck className="h-10 w-10" />,
-        href: "/spk",
+        href: "/dashboard/spk",
     },
     {
         id: "menu-pengawasan",
         title: "PIC Pengawasan",
         description: "Form input pic pengawasan pekerjaan proyek",
         icon: <UserCheck className="h-10 w-10" />,
-        href: "/inputpic",
+        href: "/dashboard/inputpic",
     },
     {
         id: "menu-opname",
         title: "Opname",
         description: "Form opname proyek toko",
         icon: <ClipboardCheck className="h-10 w-10" />,
-        href: "/opname",
+        href: "/dashboard/opname",
     },
     {
         id: "menu-dokumentasi",
@@ -89,21 +89,21 @@ const allMenuItems: MenuItem[] = [
         title: "Tambahan Surat Perintah Kerja",
         description: "Form pertambahan hari surat perintah kerja",
         icon: <FilePlus className="h-10 w-10" />,
-        href: "/tambahspk",
+        href: "/dashboard/tambahspk",
     },
     {
         id: "menu-svdokumen",
         title: "Penyimpanan Dokumen Toko",
         description: "Form penyimpanan dokumen",
         icon: <FolderOpen className="h-10 w-10" />,
-        href: "/svdokumen",
+        href: "/dashboard/svdokumen",
     },
     {
         id: "menu-gantt",
         title: "Gantt Chart",
         description: "Progress pekerjaan toko",
         icon: <GanttChartSquare className="h-10 w-10" />,
-        href: "/gantt",
+        href: "/dashboard/gantt",
     },
     {
         id: "menu-sp",
@@ -118,7 +118,7 @@ const allMenuItems: MenuItem[] = [
         title: "User Log",
         description: "Log aktivitas pengguna",
         icon: <Users className="h-10 w-10" />,
-        href: "/userlog",
+        href: "/dashboard/userlog",
     },
 ];
 
@@ -157,6 +157,10 @@ export default function DashboardPage() {
     const [visibleMenus, setVisibleMenus] = useState<MenuItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+    const [showSessionExpiredDialog, setShowSessionExpiredDialog] =
+        useState(false);
+    const [showFeatureDisabledDialog, setShowFeatureDisabledDialog] =
+        useState(false);
 
     useEffect(() => {
         // Security check
@@ -166,8 +170,7 @@ export default function DashboardPage() {
         const cabang = sessionStorage.getItem("loggedInUserCabang");
 
         if (!authenticated || authenticated !== "true" || !role) {
-            alert("Sesi Anda telah habis. Silakan login kembali.");
-            router.push("/auth");
+            setShowSessionExpiredDialog(true);
             return;
         }
 
@@ -263,9 +266,7 @@ export default function DashboardPage() {
                                 <div
                                     key={menu.id}
                                     onClick={() =>
-                                        alert(
-                                            "Fitur Surat Peringatan belum tersedia.",
-                                        )
+                                        setShowFeatureDisabledDialog(true)
                                     }
                                     className="cursor-pointer"
                                 >
@@ -319,6 +320,52 @@ export default function DashboardPage() {
                         <AlertDialogAction onClick={handleLogout}>
                             Ya, Logout
                         </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+            {/* Session Expired Dialog */}
+            <AlertDialog
+                open={showSessionExpiredDialog}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        router.push("/auth");
+                    }
+                }}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Sesi Habis</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Sesi Anda telah habis. Silakan login kembali untuk
+                            melanjutkan.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogAction onClick={() => router.push("/auth")}>
+                            OK, Login Kembali
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+            {/* Feature Disabled Dialog */}
+            <AlertDialog
+                open={showFeatureDisabledDialog}
+                onOpenChange={setShowFeatureDisabledDialog}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            Fitur Belum Tersedia
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Fitur Surat Peringatan belum tersedia. Silakan coba
+                            lagi nanti.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogAction>OK</AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
