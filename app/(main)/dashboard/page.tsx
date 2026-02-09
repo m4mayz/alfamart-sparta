@@ -171,12 +171,9 @@ export default function DashboardPage() {
             return;
         }
 
-        setUserEmail(email || "");
-        setUserRole(role || "");
-
         // Determine visible menus based on role
         const currentRole = role.toUpperCase();
-        let allowedMenuIds = roleConfig[currentRole]
+        const allowedMenuIds = roleConfig[currentRole]
             ? [...roleConfig[currentRole]]
             : [];
 
@@ -196,6 +193,9 @@ export default function DashboardPage() {
             allowedMenuIds.includes(item.id),
         );
 
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setUserEmail(email || "");
+        setUserRole(role || "");
         setVisibleMenus(filteredMenus);
         setIsLoading(false);
     }, [router]);
@@ -234,7 +234,7 @@ export default function DashboardPage() {
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2 text-sm">
                                 <span className="text-muted-foreground">
-                                    Logged in as:
+                                    Masuk sebagai:
                                 </span>
                                 <span className="font-medium">{userEmail}</span>
                                 <span className="text-muted-foreground">•</span>

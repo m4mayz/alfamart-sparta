@@ -1,39 +1,9 @@
 import {
     Card,
-    CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import Link from "next/link";
-
-function CardWrapper({
-    children,
-    href,
-    isExternal,
-}: {
-    children: React.ReactNode;
-    href: string;
-    isExternal: boolean;
-}) {
-    if (isExternal) {
-        return (
-            <a
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block h-full"
-            >
-                {children}
-            </a>
-        );
-    }
-    return (
-        <Link href={href} className="block h-full">
-            {children}
-        </Link>
-    );
-}
 
 export function DashboardCard({
     title,
@@ -53,17 +23,17 @@ export function DashboardCard({
             href={href}
             target={isExternal ? "_blank" : "_self"}
             rel={isExternal ? "noopener noreferrer" : ""}
-            className="block h-full"
+            className="block"
         >
-            <Card className="h-full hover:bg-primary hover:border-primary transition-all duration-300 hover:scale-[1.02] shadow-md border border-border cursor-pointer group">
-                <CardHeader>
-                    <div className="flex items-center justify-center text-primary group-hover:text-primary-foreground transition-colors m-10">
+            <Card className="h-[240px] hover:bg-primary hover:border-primary transition-all duration-300 hover:scale-[1.02] shadow-md border border-border cursor-pointer group flex flex-col">
+                <CardHeader className="flex-1 flex flex-col items-center justify-center text-center">
+                    <div className="flex items-center justify-center text-primary group-hover:text-primary-foreground transition-colors mb-3">
                         {icon}
                     </div>
-                    <CardTitle className="text-center font-semibold text-lg group-hover:text-primary-foreground transition-colors">
+                    <CardTitle className="font-semibold text-xl group-hover:text-primary-foreground transition-colors">
                         {title}
                     </CardTitle>
-                    <CardDescription className="mt-2 text-center text-muted-foreground group-hover:text-primary-foreground/90 transition-colors">
+                    <CardDescription className="mt-2 text-muted-foreground group-hover:text-primary-foreground/90 transition-colors line-clamp-3">
                         {description}
                     </CardDescription>
                 </CardHeader>
